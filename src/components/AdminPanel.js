@@ -95,7 +95,7 @@ const AdminPanel = ({ products, onAddProduct, onUpdateProduct, onRemoveProduct, 
     const productSales = {}; // {productId: {name, quantitySold, revenue}}
 
     orders.forEach(order => {
-      if (order.status === 'accepted') {
+      if (order.status === 'accepted' || order.status === 'delivered') {
         order.items.forEach(item => {
           totalRevenue += item.price * item.quantity;
           totalProductsSold += item.quantity;
@@ -355,24 +355,31 @@ const AdminPanel = ({ products, onAddProduct, onUpdateProduct, onRemoveProduct, 
                       {/* Opciones de seguimiento siempre visibles si el pedido no está rechazado o cancelado */}
                       {order.status !== 'rejected' && order.status !== 'cancelled' && (
                         <>
-                          <button
-                            onClick={() => onUpdateOrder(order.id, 'preparing')}
-                            className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition-colors font-medium"
-                          >
-                            Preparando
-                          </button>
-                          <button
-                            onClick={() => onUpdateOrder(order.id, 'ready')}
-                            className="bg-purple-500 text-white px-3 py-1 rounded hover:bg-purple-600 transition-colors font-medium"
-                          >
-                            Listo para salir
-                          </button>
-                          <button
-                            onClick={() => onUpdateOrder(order.id, 'on_the_way')}
-                            className="bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-600 transition-colors font-medium"
-                          >
-                            En camino
-                          </button>
+                          {
+                            order.status !== 'delivered' && (
+                              <>
+                                <button
+                                  onClick={() => onUpdateOrder(order.id, 'preparing')}
+                                  className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition-colors font-medium"
+                                >
+                                  Preparando
+                                </button>
+                                <button
+                                  onClick={() => onUpdateOrder(order.id, 'ready')}
+                                  className="bg-purple-500 text-white px-3 py-1 rounded hover:bg-purple-600 transition-colors font-medium"
+                                >
+                                  Listo para salir
+                                </button>
+                                <button
+                                  onClick={() => onUpdateOrder(order.id, 'on_the_way')}
+                                  className="bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-600 transition-colors font-medium"
+                                >
+                                  En camino
+                                </button>
+                              </>
+                            )
+                          }
+                          
                           <button
                             onClick={() => onUpdateOrder(order.id, 'delivered')}
                             className="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600 transition-colors font-medium"
